@@ -13,7 +13,8 @@ if config.config_file_name is not None:
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 if DATABASE_URL:
-    config.set_main_option("sqlalchemy.url", DATABASE_URL)
+    sync_url = DATABASE_URL.replace("postgresql+asyncpg://", "postgresql://").replace("asyncpg://", "postgresql://")
+    config.set_main_option("sqlalchemy.url", sync_url)
 
 from app.models import Base  # noqa: E402
 
