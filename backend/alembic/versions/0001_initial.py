@@ -9,6 +9,7 @@ Create Date: 2026-05-01
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+from sqlalchemy.dialects.postgresql import ENUM
 
 
 revision = "0001_initial"
@@ -22,35 +23,54 @@ def upgrade() -> None:
     op.execute('CREATE EXTENSION IF NOT EXISTS "pgcrypto";')
 
     # Enums
-    case_status = sa.Enum(
-        "processing", "pending_review", "verified", "active", "closed",
+    case_status = ENUM(
+        "processing",
+        "pending_review",
+        "verified",
+        "active",
+        "closed",
         name="case_status",
-        create_type=False
+        create_type=False,
     )
     
-    directive_status = sa.Enum(
-        "pending_review", "verified", "in_progress", "completed",
-        "overdue", "contempt_risk",
+    directive_status = ENUM(
+        "pending_review",
+        "verified",
+        "in_progress",
+        "completed",
+        "overdue",
+        "contempt_risk",
         name="directive_status",
-        create_type=False
+        create_type=False,
     )
     
-    risk_level = sa.Enum(
-        "overdue", "critical", "due_soon", "watch", "compliant",
+    risk_level = ENUM(
+        "overdue",
+        "critical",
+        "due_soon",
+        "watch",
+        "compliant",
         name="risk_level",
-        create_type=False
+        create_type=False,
     )
     
-    user_role = sa.Enum(
-        "uploader", "reviewer", "officer", "admin",
+    user_role = ENUM(
+        "uploader",
+        "reviewer",
+        "officer",
+        "admin",
         name="user_role",
-        create_type=False
+        create_type=False,
     )
     
-    audit_action = sa.Enum(
-        "created", "updated", "verified", "status_changed", "alert_sent",
+    audit_action = ENUM(
+        "created",
+        "updated",
+        "verified",
+        "status_changed",
+        "alert_sent",
         name="audit_action",
-        create_type=False
+        create_type=False,
     )
 
     case_status.create(op.get_bind(), checkfirst=True)
